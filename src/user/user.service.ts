@@ -30,12 +30,31 @@ export class UserService {
     }
   }
 
-  async findAll(): Promise<{ status: number; message: string; data: User[] }> {
-    const users = await this.userModel.find().select('-password -__v');
+  async findAll(query: any): Promise<{ status: number; message: string; count: number; data: User[] }> {
+    const { limit = 1000, skip = 0, sort = 'asc', name, email, role } = query;
+
+    if (Number.isNaN(+limit) || Number.isNaN(+skip) || (sort && !['desc', 'asc'].includes(sort))) {
+      throw new HttpException('Invalid query parameters', 400);
+    }
+
+    const filter: any = {};
+    if (name) filter.name = new RegExp(name, 'i');
+    if (email) filter.email = new RegExp(email, 'i');
+    if (role) filter.role = new RegExp(role, 'i');
+
+
+    const users = await this.userModel
+      .find(filter)
+      .skip(skip)
+      .limit(limit)
+      .sort({ name: sort })
+      .select('-password -__v');
+
     return {
       status: 200,
       message: 'Users retrieved successfully',
-      data: users,
+      count: users.length,
+      data: users
     };
   }
 
