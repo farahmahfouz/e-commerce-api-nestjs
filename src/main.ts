@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const jwtService = app.get(JwtService);
   const token = jwtService.sign(
-    { email: 'admin@test.com', role: 'admin', password: '1234567' },
+    { _id: '69093e6ce189e6a09c43ccff', email: 'bedair@gmail.com', role: 'user', password: 'test12345' },
     { secret: process.env.JWT_SECRET }
   );
   console.log('Temporary admin token:', token);

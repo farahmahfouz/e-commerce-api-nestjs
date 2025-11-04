@@ -102,4 +102,49 @@ export class UserService {
       message: 'User deleted successfully',
     };
   }
+
+  async getMe(payload: { _id: string}): Promise<{ status: number; message: string; data: User }> {
+    const user = await this.userModel.findById(payload._id).select('-password -__v');
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return {
+      status: 200,
+      message: 'User profile retrieved successfully',
+      data: user,
+    };
+  }
+
+  async updateMe(payload: { _id: string }, updateUserDto: UpdateUserDto): Promise<{ status: number; message: string; data: { user: User } }> {  
+    const user = await this.userModel.findById(payload._id).select('-password -__v');
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    if (updateUserDto.password) {
+      const saltOrRounds = 10;
+      updateUserDto.password = await bcrypt.hash(updateUserDto.password, saltOrRounds);
+    } 
+    const updatedUser = await this.userModel.findByIdAndUpdate(payload._id, updateUserDto, { new: true }).select('-password -__v');
+    return {
+      status: 200,
+      message: 'User profile updated successfully',
+      data: {
+        user: updatedUser!
+      },
+    };
+  }
+
+  async removeMe(payload: { _id: string }): Promise<{ status: number; message: string }> {
+    const user = await this.userModel.findById(payload._id).select('-password -__v');
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    await this.userModel.findByIdAndUpdate(payload._id, { isActive: false });
+    return {
+      status: 200,
+      message: 'User deactivated successfully',
+    };
+  }
+
 }

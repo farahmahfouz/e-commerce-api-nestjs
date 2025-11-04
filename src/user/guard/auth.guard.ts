@@ -18,12 +18,12 @@ export class AuthGuard implements CanActivate {
         const request = context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
 
-        const requiredRoles =  this.reflector.get<string[]>('roles', context.getHandler());
+        const requiredRoles = this.reflector.get<string[]>('roles', context.getHandler());
 
         if (!requiredRoles) {
             return true;
         }
-  
+
         if (!token) {
             throw new UnauthorizedException();
         }
@@ -35,6 +35,10 @@ export class AuthGuard implements CanActivate {
                 }
             );
 
+            if (payload._id) {
+                request['user'] = payload;
+                return true;
+            }
 
             if (!payload.role || !requiredRoles.some((role) => payload.role.includes(role))) {
                 throw new UnauthorizedException();
