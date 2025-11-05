@@ -1,6 +1,6 @@
 import { IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, IsUrl, Length, MaxLength, MinLength } from "class-validator";
 
-export class CreateUserDto {
+export class SignUpDto {
     @IsString({ message: 'Name must be a string' })
     @IsNotEmpty({ message: 'Name is required' })
     @MinLength(3, { message: 'Name must be at least 3 characters long' })
@@ -52,4 +52,16 @@ export class CreateUserDto {
     @IsOptional()
     @IsEnum(['male', 'female'], { message: 'Gender must be either male or female' })
     gender?: string;
+}
+
+export class SignInDto {
+    @IsString({ message: 'Email must be a string' })
+    @IsNotEmpty({ message: 'Email is required' })
+    @IsEmail({}, { message: 'Email must be a valid email address' })
+    email: string;
+
+    @IsString({ message: 'Password must be a string' })
+    @IsNotEmpty({ message: 'Password is required' })
+    @MinLength(6, { message: 'Password must be at least 6 characters long' })
+    password: string;
 }

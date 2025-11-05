@@ -22,6 +22,7 @@ export class User {
     @Prop({
         required: true, type: String,
         minlength: [6, 'Password must be at least 6 characters'],
+        select: false
     })
     password: string;
 
@@ -54,7 +55,7 @@ export class User {
 
     @Prop({
         type: Boolean,
-        enum: [true, false],
+        default: true
     })
     isActive: boolean;
 
@@ -72,9 +73,13 @@ export class User {
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
+UserSchema.methods.correctPassword = async function (candidatePassword: string, userPassword: string): Promise<boolean> {
+    return await bcrypt.compare(candidatePassword, userPassword);
+}
+
 
 UserSchema.pre<UserDocument>('save', async function (next) {
-    if(!this.isModified('password')) return next();
+    if (!this.isModified('password')) return next();
     this.password = await bcrypt.hash(this.password, 10);
     next();
 })
