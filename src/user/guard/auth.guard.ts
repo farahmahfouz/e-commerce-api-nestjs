@@ -35,7 +35,7 @@ export class AuthGuard implements CanActivate {
                 }
             );
 
-            if (payload._id) {
+            if (payload._id && payload.role === 'admin' ) {
                 request['user'] = payload;
                 return true;
             }
