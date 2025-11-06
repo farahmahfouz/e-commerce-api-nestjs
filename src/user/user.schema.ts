@@ -61,6 +61,7 @@ export class User {
 
     @Prop({
         type: String,
+        select: false
     })
     verificationCode: string;
 
