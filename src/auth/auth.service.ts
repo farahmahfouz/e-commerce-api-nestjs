@@ -1,6 +1,5 @@
-import { Body, HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { ChangePasswordDto, ResetPasswordDto, SignInDto, SignUpDto } from './dto/auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from 'src/user/user.schema';
 import { Model } from 'mongoose';
