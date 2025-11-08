@@ -48,7 +48,13 @@ export class AuthService {
       status: 'success',
       message: 'User signed in successfully',
       token,
-      data: { user },
+      data: {
+        user: {
+          name: user.name,
+          email: user.email,
+          isActive: user.isActive,
+        }
+      },
     };
   }
 
