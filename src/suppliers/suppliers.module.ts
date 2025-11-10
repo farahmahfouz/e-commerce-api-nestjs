@@ -9,4 +9,4 @@ import { Suppliers, suppliersSchema } from './suppliers.schema';
   controllers: [SuppliersController],
   providers: [SuppliersService],
 })
-export class SuppliersModule {}
+export class SuppliersModule { }
