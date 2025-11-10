@@ -11,7 +11,7 @@ async function bootstrap() {
   //   { secret: process.env.JWT_SECRET }
   // );
   // console.log('Temporary admin token:', token);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ forbidNonWhitelisted: true, whitelist: true }));
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
